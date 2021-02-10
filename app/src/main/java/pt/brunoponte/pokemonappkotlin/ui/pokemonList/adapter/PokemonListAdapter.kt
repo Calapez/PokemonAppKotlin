@@ -4,10 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.Pokemon
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.SimplePokemon
 import pt.brunoponte.pokemonappkotlin.databinding.PokemonItemBinding
-import pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter.Interaction
+import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse.SimplePokemon
 
 class PokemonListAdapter(
     private val context: Context,

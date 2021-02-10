@@ -2,9 +2,8 @@ package pt.brunoponte.pokemonappkotlin.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.Pokemon
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.SimplePokemon
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.SimplePokemonsWrapper
+import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
+import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse
 import pt.brunoponte.pokemonappkotlin.utils.Constants
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -19,7 +18,7 @@ interface Api {
     fun listPokemons(
         @Query("offset") offset: Int,
         @Query("limit") pageSize: Int
-    ) : Call<SimplePokemonsWrapper>
+    ) : Call<SimplePokemonsResponse>
 
     @GET("pokemon/{name}")
     fun showPokemon(

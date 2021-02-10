@@ -9,8 +9,8 @@ data class Sprites (
     @SerializedName("front_default")
     var frontUrl: String = "",
 
-    @SerializedName("back_default")
     @Expose
+    @SerializedName("back_default")
     var backUrl: String = ""
 
 )

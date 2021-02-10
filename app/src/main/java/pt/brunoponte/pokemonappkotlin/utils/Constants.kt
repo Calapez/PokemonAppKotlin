@@ -9,12 +9,11 @@ class Constants {
     companion object {
 
         const val baseUrl = "https://pokeapi.co/api/v2/"
-        const val pageSize = 30
+        const val pageSize = 15
 
         fun fillImageFromUrl(imgView: ImageView, url: String) =
             Picasso.get()
             .load(url)
-            .resize(500, 500)
             .into(imgView)
 
         fun capitalizeFirstLetter(str: String) =

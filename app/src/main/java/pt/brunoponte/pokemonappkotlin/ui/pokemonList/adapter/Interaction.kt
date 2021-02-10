@@ -1,6 +1,6 @@
 package pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter
 
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.SimplePokemon
+import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse.SimplePokemon
 
 
 interface Interaction {

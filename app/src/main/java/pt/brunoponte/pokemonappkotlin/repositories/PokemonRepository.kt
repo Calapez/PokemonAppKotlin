@@ -1,10 +1,10 @@
 package pt.brunoponte.pokemonappkotlin.repositories
 
 import androidx.lifecycle.MutableLiveData
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.Pokemon
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.SimplePokemon
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.SimplePokemonsWrapper
+import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.network.Api
+import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse
+import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse.SimplePokemon
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,18 +35,18 @@ class PokemonRepository {
         // Fetch pokemons
         val apiService = Api()
 
-        val listPokemonsCall: Call<SimplePokemonsWrapper> =
+        val listPokemonsCall: Call<SimplePokemonsResponse> =
             apiService.listPokemons(offset, pageSize)
 
-        listPokemonsCall.enqueue(object : Callback<SimplePokemonsWrapper> {
+        listPokemonsCall.enqueue(object : Callback<SimplePokemonsResponse> {
             override fun onResponse(
-                call: Call<SimplePokemonsWrapper>,
-                response: Response<SimplePokemonsWrapper>
+                call: Call<SimplePokemonsResponse>,
+                response: Response<SimplePokemonsResponse>
             ) {
                 val wrapper = response.body() ?: return
 
                 val photosCounter = intArrayOf(0)
-                for (pokemon in wrapper.pokemons) {
+                for (pokemon in wrapper.simplePokemons) {
                     tempPokemons.add(pokemon)
 
                     val showPokemonCall: Call<Pokemon> =
@@ -57,10 +57,13 @@ class PokemonRepository {
                             response: Response<Pokemon>
                         ) {
                             photosCounter[0]++
-                            pokemon.photoUrl = response.body()!!.sprites!!.frontUrl
+
+                            response.body()?.sprites?.frontUrl?.let { frontUrl ->
+                                pokemon.photoUrl = frontUrl
+                            }
 
                             // Last photo, finish list
-                            if (photosCounter[0] == wrapper.pokemons.size) {
+                            if (photosCounter[0] == wrapper.simplePokemons.size) {
                                 mIsFetching.value = false
                                 mSimplePokemons.postValue(tempPokemons)
                             }
@@ -77,7 +80,7 @@ class PokemonRepository {
             }
 
             override fun onFailure(
-                call: Call<SimplePokemonsWrapper?>,
+                call: Call<SimplePokemonsResponse>,
                 t: Throwable
             ) {
                 t.printStackTrace()

@@ -4,54 +4,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import pt.brunoponte.pokemonappkotlin.data.entities.pokemon.SimplePokemon
+import pt.brunoponte.pokemonappkotlin.R
 import pt.brunoponte.pokemonappkotlin.databinding.FragmentPokemonListBinding
+import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse.SimplePokemon
 import pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter.Interaction
 import pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter.PokemonListAdapter
 import pt.brunoponte.pokemonappkotlin.utils.Constants
-import pt.brunoponte.pokemonappkotlin.viewmodels.PokemonListViewModel
+import pt.brunoponte.pokemonappkotlin.viewmodels.PokemonsViewModel
 
 @AndroidEntryPoint
 class PokemonListFragment : Fragment(), Interaction {
 
-    val viewModel: PokemonListViewModel by viewModels()
+    val viewModel: PokemonsViewModel by activityViewModels()
 
-    lateinit var mLayoutManager: LinearLayoutManager
     lateinit var listAdapter: PokemonListAdapter
     lateinit var binding: FragmentPokemonListBinding
 
-    /* Scroll Listener for handling pagination with Recycler View */
-    private val recyclerViewOnScrollListener: RecyclerView.OnScrollListener =
-        object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (viewModel!!.getIsFetching() == null
-                    || viewModel!!.getIsFetching().value == null
-                ) {
-                    return
-                }
-                val visibleItemCount: Int = mLayoutManager!!.childCount
-                val totalItemCount: Int = mLayoutManager.itemCount
-                val firstVisibleItemPosition: Int = mLayoutManager.findFirstVisibleItemPosition()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-                // Scrolled to the bottom, fetch more pokemons
-                if (!viewModel!!.getIsFetching().value!!
-                    && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0 && totalItemCount >= Constants.pageSize
-                ) {
-                    // Load new page of pokemons
-                    viewModel!!.fetchMorePokemons()
-                }
-            }
-        }
+        listAdapter = PokemonListAdapter(requireContext(), mutableListOf(), this)
+        listAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,37 +41,55 @@ class PokemonListFragment : Fragment(), Interaction {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPokemonListBinding.inflate(inflater, container, false)
-
-        /* Recycler View */
-        // Set adapter value
-        listAdapter = PokemonListAdapter (
-            requireContext(),
-            viewModel.getSimplePokemons().value!!,
-            this
-        )
-
-        // Set layout manager
-        mLayoutManager = LinearLayoutManager(context)
-        mLayoutManager.orientation = LinearLayoutManager.VERTICAL
-
-        // Set recycler view
-        with(binding) {
-            with(recyclerPokemon) {
-                layoutManager = mLayoutManager
-                adapter = listAdapter
-                addOnScrollListener(recyclerViewOnScrollListener)
-            }
-        }
-
-        setObservers()
-        viewModel.fetchMorePokemons()
-
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initRecyclerView()
+        setObservers()
+
+        viewModel.fetchMorePokemons()
+    }
 
     override fun onItemSelected(position: Int, item: SimplePokemon) {
-        Toast.makeText(context, "item clicked", LENGTH_SHORT).show()
+        // Set selected pokemon in ViewModel and navigate to Details Fragment
+        viewModel.setSelectedPokemon(item)
+        findNavController()
+            .navigate(R.id.action_galleryFragment_to_detailsFragment)
+    }
+
+    private fun initRecyclerView() {
+        // Set recycler view
+        with(binding.recyclerPokemons) {
+            val layoutManager = LinearLayoutManager(context)
+            layoutManager.orientation = LinearLayoutManager.VERTICAL
+
+            this.layoutManager = layoutManager
+            this.adapter = listAdapter
+            this.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    if (viewModel.getIsFetching().value == null) {
+                        return
+                    }
+
+                    val visibleItemCount: Int = layoutManager.childCount
+                    val totalItemCount: Int = layoutManager.itemCount
+                    val firstVisibleItemPosition: Int = layoutManager.findFirstVisibleItemPosition()
+
+                    // Scrolled to the bottom, fetch more pokemons
+                    if (!viewModel.getIsFetching().value!!
+                        && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0 && totalItemCount >= Constants.pageSize
+                    ) {
+                        // Load new page of pokemons
+                        viewModel.fetchMorePokemons()
+                    }
+                }
+            })
+        }
     }
 
     private fun setObservers() {
