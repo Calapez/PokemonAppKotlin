@@ -8,7 +8,7 @@ data class Pokemon (
 
     @Expose
     @SerializedName("id")
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var id: Long = -1,
 
     @Expose

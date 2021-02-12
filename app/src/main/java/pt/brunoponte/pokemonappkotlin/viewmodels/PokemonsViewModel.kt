@@ -1,5 +1,6 @@
 package pt.brunoponte.pokemonappkotlin.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
@@ -10,35 +11,39 @@ import pt.brunoponte.pokemonappkotlin.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class PokemonsViewModel : ViewModel() {
+class PokemonsViewModel
+@Inject constructor(
+    private val repository: PokemonRepository
+): ViewModel() {
 
-    private val mRepository = PokemonRepository.instance
-    private val mSimplePokemons = mRepository.getSimplePokemons()
-    private val mIsFetching = mRepository.getIsFetching()
     private val selectedPokemon = MutableLiveData<Pokemon>()
 
-    fun getIsFetching()
-            = mIsFetching
+    fun getIsFetching(): LiveData<Boolean> {
+        return repository.getIsFetching()
+    }
 
-    fun getSimplePokemons()
-            = mSimplePokemons
+    fun getSimplePokemons(): LiveData<List<SimplePokemon>> {
+        return repository.getSimplePokemons()
+    }
 
-    fun getSelectedPokemon()
-            = selectedPokemon
+    fun getSelectedPokemon(): LiveData<Pokemon> {
+        return selectedPokemon
+    }
 
-    fun setSelectedPokemon(pokemon: SimplePokemon) {
+    fun selectPokemon(pokemon: SimplePokemon) {
         fetchPokemonDetails(pokemon.name)
     }
 
     fun fetchMorePokemons() {
-        if (mRepository.getSimplePokemons().value == null) {
+        if (repository.getSimplePokemons().value == null) {
             return
         }
 
         // Offset is simply the size of the pokemons
-        val offset = mRepository.getSimplePokemons().value!!.size
-        mRepository.fetchMorePokemons(offset, Constants.pageSize)
+        val offset = repository.getSimplePokemons().value!!.size
+        repository.fetchPokemons(offset, Constants.pageSize)
     }
 
     // FIXME: This is just temporarily in ModelView

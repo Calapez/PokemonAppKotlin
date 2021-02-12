@@ -22,10 +22,9 @@ import pt.brunoponte.pokemonappkotlin.viewmodels.PokemonsViewModel
 @AndroidEntryPoint
 class PokemonListFragment : Fragment(), Interaction {
 
-    val viewModel: PokemonsViewModel by activityViewModels()
-
-    lateinit var listAdapter: PokemonListAdapter
-    lateinit var binding: FragmentPokemonListBinding
+    private val viewModel: PokemonsViewModel by activityViewModels()
+    private lateinit var listAdapter: PokemonListAdapter
+    private lateinit var binding: FragmentPokemonListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +54,7 @@ class PokemonListFragment : Fragment(), Interaction {
 
     override fun onItemSelected(position: Int, item: SimplePokemon) {
         // Set selected pokemon in ViewModel and navigate to Details Fragment
-        viewModel.setSelectedPokemon(item)
+        viewModel.selectPokemon(item)
         findNavController()
             .navigate(R.id.action_galleryFragment_to_detailsFragment)
     }
@@ -82,7 +81,9 @@ class PokemonListFragment : Fragment(), Interaction {
 
                     // Scrolled to the bottom, fetch more pokemons
                     if (!viewModel.getIsFetching().value!!
-                        && visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0 && totalItemCount >= Constants.pageSize
+                        && visibleItemCount + firstVisibleItemPosition >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                        && totalItemCount >= Constants.pageSize
                     ) {
                         // Load new page of pokemons
                         viewModel.fetchMorePokemons()
