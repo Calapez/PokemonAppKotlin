@@ -5,19 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
-import pt.brunoponte.pokemonappkotlin.network.Api
-import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse.SimplePokemon
 import pt.brunoponte.pokemonappkotlin.repositories.PokemonRepository
 import pt.brunoponte.pokemonappkotlin.utils.Constants
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class PokemonsViewModel
 @Inject constructor(
-    val repository: PokemonRepository
+    private val repository: PokemonRepository
 ): ViewModel() {
 
     private val selectedPokemon = MutableLiveData<Pokemon>()

@@ -1,7 +1,5 @@
 package pt.brunoponte.pokemonappkotlin.network
 
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse
 import pt.brunoponte.pokemonappkotlin.utils.Constants
@@ -21,27 +19,20 @@ interface Api {
     ) : Call<SimplePokemonsResponse>
 
     @GET("pokemon/{name}")
-    fun getPokemonDetails(
+    fun getFullPokemon(
         @Path("name") name: String
     ): Call<Pokemon>
 
     companion object {
+
         operator fun invoke() : Api {
-
-            val logging = HttpLoggingInterceptor()
-            logging.level = HttpLoggingInterceptor.Level.BODY
-
-            val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build()
-
             return Retrofit.Builder()
                 .baseUrl(Constants.baseUrl)
-//                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api::class.java)
         }
+
     }
 
 }

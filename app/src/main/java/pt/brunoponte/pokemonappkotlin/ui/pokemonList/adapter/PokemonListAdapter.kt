@@ -7,7 +7,7 @@ import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.databinding.PokemonItemBinding
 
 class PokemonListAdapter(
-    private val pokemonList: MutableList<Pokemon>,
+    private val pokemonList: MutableList<Pokemon> = mutableListOf(),
     private val interaction: Interaction
 ) : RecyclerView.Adapter<PokemonViewHolder>() {
 

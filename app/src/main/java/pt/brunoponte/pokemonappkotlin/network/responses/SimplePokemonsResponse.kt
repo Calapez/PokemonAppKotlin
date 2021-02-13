@@ -14,14 +14,7 @@ class SimplePokemonsResponse (
     inner class SimplePokemon (
         @Expose
         @SerializedName("name")
-        var name: String = "",
-
-        @Expose
-        @SerializedName("url")
-        var url: String = "",
-
-        @Transient
-        var photoUrl: String = ""
+        var name: String = ""
     )
 
 }

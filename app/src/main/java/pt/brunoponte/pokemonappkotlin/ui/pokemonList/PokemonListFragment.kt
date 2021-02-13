@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +28,7 @@ class PokemonListFragment : Fragment(), Interaction {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        listAdapter = PokemonListAdapter(mutableListOf(), this)
+        listAdapter = PokemonListAdapter(interaction = this)
         listAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
     }
 
@@ -37,7 +36,7 @@ class PokemonListFragment : Fragment(), Interaction {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPokemonListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -66,17 +65,23 @@ class PokemonListFragment : Fragment(), Interaction {
 
             this.layoutManager = layoutManager
             this.adapter = listAdapter
+
             this.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                }
+
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
-                    if (viewModel.getIsFetching().value == null) {
+                    if (viewModel.getIsFetching().value == null ) {
                         return
                     }
 
-                    val visibleItemCount: Int = layoutManager.childCount
-                    val totalItemCount: Int = layoutManager.itemCount
-                    val firstVisibleItemPosition: Int = layoutManager.findFirstVisibleItemPosition()
+                    val visibleItemCount = layoutManager.childCount
+                    val totalItemCount = layoutManager.itemCount
+                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
                     // Scrolled to the bottom, fetch more pokemons
                     if (!viewModel.getIsFetching().value!!

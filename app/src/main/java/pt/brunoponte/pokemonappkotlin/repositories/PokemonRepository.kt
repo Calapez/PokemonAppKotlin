@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.network.Api
 import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse
+import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -11,14 +12,12 @@ import javax.inject.Inject
 
 class PokemonRepository
 @Inject constructor(
-    val api: Api
+    private val api: Api
 ) {
 
-    private val mPokemons: MutableLiveData<List<Pokemon>>
-            = MutableLiveData(mutableListOf())
+    private val mPokemons: MutableLiveData<List<Pokemon>> = MutableLiveData(mutableListOf())
 
-    private val mIsFetching: MutableLiveData<Boolean>
-            = MutableLiveData(false)
+    private val mIsFetching: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getPokemons()
             = mPokemons
@@ -27,7 +26,7 @@ class PokemonRepository
             = mIsFetching
 
     fun fetchPokemons(offset: Int, pageSize: Int) {
-        fetchPokemonsFromApi(offset, pageSize)
+        fetchSimplePokemonsFromApi(offset, pageSize)
     }
 
     private fun savePokemon(pokemon: Pokemon) {
@@ -40,8 +39,8 @@ class PokemonRepository
     }
 
     // Fetch pokemons from a given offset and with a given pageSize
-    private fun fetchPokemonsFromApi(offset: Int, pageSize: Int) {
-        mIsFetching.value = true
+    private fun fetchSimplePokemonsFromApi(offset: Int, pageSize: Int) {
+        mIsFetching.postValue(true)
 
         // Fetch simple pokemons
         api.listPokemons(offset, pageSize)
@@ -52,24 +51,45 @@ class PokemonRepository
                 ) {
 
                     if (response.isSuccessful) {
-                        response.body()?.simplePokemons?.forEach { simplePokemon ->
-
-                            api.getPokemonDetails(simplePokemon.name).enqueue(object: Callback<Pokemon> {
-                                override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
-                                    response.body()?.let { pokemon ->
-                                        savePokemon(pokemon)
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<Pokemon>, t: Throwable) { }
-
-                            })
+                        response.body()?.simplePokemons?.let { simplePokemons ->
+                            fetchFullPokemonsFromApi(simplePokemons)
                         }
                     }
                 }
 
-                override fun onFailure(call: Call<SimplePokemonsResponse>, t: Throwable) { }
+                override fun onFailure(call: Call<SimplePokemonsResponse>, t: Throwable) {
+                    mIsFetching.postValue(false)
+                }
             })
+    }
+
+    // Fetch full pokemons from a list of simple pokemons
+    private fun fetchFullPokemonsFromApi(simplePokemons: List<SimplePokemon>) {
+        mIsFetching.value = true
+
+        var fetchedPokemons = 0
+
+        simplePokemons.forEach { simplePokemon ->
+
+            api.getFullPokemon(simplePokemon.name).enqueue(object: Callback<Pokemon> {
+                override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
+                    response.body()?.let { pokemon ->
+                        savePokemon(pokemon)
+                        fetchedPokemons++
+                    }
+
+                    if (fetchedPokemons == simplePokemons.size) {
+                        mIsFetching.postValue(false)
+                        return
+                    }
+                }
+
+                override fun onFailure(call: Call<Pokemon>, t: Throwable) {
+                    mIsFetching.postValue(false)
+                }
+
+            })
+        }
     }
 
 }

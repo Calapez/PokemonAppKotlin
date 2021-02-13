@@ -70,7 +70,7 @@
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/listAbilities"
+        app:layout_constraintBottom_toBottomOf="@id/recylerAbilities"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVert0_75"
         app:layout_constraintStart_toStartOf="@+id/guidelineVert0_5"
         app:layout_constraintTop_toBottomOf="@+id/textName"
@@ -84,14 +84,14 @@
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/listMoves"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerMoves"
         app:layout_constraintStart_toStartOf="@+id/guidelineVert0_75"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textName"
         app:layout_constraintVertical_bias="0.04" />
 
-    <ListView
-        android:id="@+id/listAbilities"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recylerAbilities"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingTop="10dp"
@@ -100,10 +100,11 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guidelineVert0_5"
         app:layout_constraintTop_toBottomOf="@+id/textAbilities"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintVertical_bias="0.05"
+        android:scrollbars="vertical" />
 
-    <ListView
-        android:id="@+id/listMoves"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerMoves"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingTop="10dp"
@@ -112,6 +113,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guidelineVert0_75"
         app:layout_constraintTop_toBottomOf="@+id/textMove"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintVertical_bias="0.05"
+        android:scrollbars="vertical" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

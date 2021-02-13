@@ -67,7 +67,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guidelineHor0_4"
-        app:layout_constraintBottom_toTopOf="@id/listAbilities" />
+        app:layout_constraintBottom_toTopOf="@id/recylerAbilities" />
 
     <TextView
         android:id="@+id/textMoves"
@@ -80,22 +80,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineVert0_5"
         app:layout_constraintTop_toTopOf="@+id/guidelineHor0_4"
-        app:layout_constraintBottom_toTopOf="@id/listMoves"/>
+        app:layout_constraintBottom_toTopOf="@id/recyclerMoves"/>
 
-    <ListView
-        android:id="@+id/listAbilities"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recylerAbilities"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVert0_5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textAbilities"
-        tools:listitem="Test" />
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
+        android:paddingHorizontal="10dp"
+        android:scrollbars="vertical"/>
 
-    <ListView
-        android:id="@+id/listMoves"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerMoves"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -105,6 +106,6 @@
         android:paddingTop="20dp"
         android:paddingBottom="10dp"
         android:paddingHorizontal="10dp"
-        tools:listitem="Test" />
+        android:scrollbars="vertical"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
