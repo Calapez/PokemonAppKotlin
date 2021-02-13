@@ -1,6 +1,5 @@
 package pt.brunoponte.pokemonappkotlin.ui.pokemonDetails
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,31 +7,35 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
-import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.databinding.FragmentPokemonDetailsBinding
 import pt.brunoponte.pokemonappkotlin.utils.Constants
+import pt.brunoponte.pokemonappkotlin.utils.Constants.Companion.capitalizeFirstLetter
 import pt.brunoponte.pokemonappkotlin.utils.Constants.Companion.fillImageFromUrl
 import pt.brunoponte.pokemonappkotlin.viewmodels.PokemonsViewModel
-import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokemonDetailsFragment : Fragment() {
 
     private val viewModel: PokemonsViewModel by activityViewModels()
     private lateinit var binding: FragmentPokemonDetailsBinding  // Using view binding
-    private lateinit var descriptionsAdapter: ArrayAdapter<String>
+    private lateinit var abilitiesAdapter: ArrayAdapter<String>
+    private lateinit var movesAdapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        descriptionsAdapter = ArrayAdapter(
+        movesAdapter = ArrayAdapter(
             requireContext(),
-            R.layout.simple_expandable_list_item_1,
+            android.R.layout.simple_expandable_list_item_1,
             mutableListOf()
+        )
+
+        abilitiesAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_expandable_list_item_1,
+                mutableListOf()
         )
     }
 
@@ -40,7 +43,7 @@ class PokemonDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPokemonDetailsBinding.inflate(inflater, container, false)
         setObservers()
         return binding.root
@@ -53,49 +56,33 @@ class PokemonDetailsFragment : Fragment() {
     }
 
     private fun fillPokemonUi(pokemon: Pokemon) {
-        descriptionsAdapter.clear()
-        descriptionsAdapter.addAll(getDescriptionsFromPokemon(pokemon))
+        movesAdapter.apply {
+            clear()
+            addAll(
+                pokemon.moves.map { move ->
+                    capitalizeFirstLetter(move.details.name)
+                }
+            )
+        }
+
+        abilitiesAdapter.apply {
+            clear()
+            addAll(
+                pokemon.abilities.map { ability ->
+                    capitalizeFirstLetter(ability.details.name)
+                }
+            )
+        }
 
         with(binding) {
-
             textName.text = Constants.capitalizeFirstLetter(pokemon.name)
-            listDescriptions.adapter = descriptionsAdapter
+            listAbilities.adapter = movesAdapter
+            listMoves.adapter = abilitiesAdapter
 
             pokemon.sprites.let { sprites ->
-                fillImageFromUrl(binding.imgPhotoFront, sprites.frontUrl)
-                fillImageFromUrl(binding.imgPhotoBack, sprites.backUrl)
+                fillImageFromUrl(binding.imgFront, sprites.frontUrl)
+                fillImageFromUrl(binding.imgBack, sprites.backUrl)
             }
         }
-    }
-
-    // Returns a long description of the pokemon: weight, abilities and moves
-    private fun getDescriptionsFromPokemon(pokemon: Pokemon): List<String> {
-        val descriptions: MutableList<String> = ArrayList()
-
-        descriptions.add("Weight = " + pokemon.weight)
-
-        for (i in pokemon.abilities.indices) {
-            pokemon.abilities[i].details.let { abilityDetails ->
-                descriptions.add(
-                    java.lang.String.format(
-                        Locale.US, "Ability #%d - %s",
-                        i + 1, abilityDetails.name
-                    )
-                )
-            }
-        }
-
-        for (i in pokemon.moves.indices) {
-            pokemon.moves[i].details.let { moveDetails ->
-                descriptions.add(
-                    java.lang.String.format(
-                        Locale.US, "Move #%d - %s",
-                        i + 1, moveDetails.name
-                    )
-                )
-            }
-        }
-
-        return descriptions
     }
 }

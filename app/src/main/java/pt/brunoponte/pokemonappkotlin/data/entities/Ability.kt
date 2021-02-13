@@ -9,7 +9,7 @@ data class Ability (
     @SerializedName("ability")
     var details: AbilityDetails
 
-) {
+) : Characteristic("ability", details.name) {
 
     data class AbilityDetails (
         @SerializedName("name")

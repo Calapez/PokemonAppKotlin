@@ -6,13 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
 import pt.brunoponte.pokemonappkotlin.R
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
@@ -21,7 +18,6 @@ import pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter.Interaction
 import pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter.PokemonListAdapter
 import pt.brunoponte.pokemonappkotlin.utils.Constants
 import pt.brunoponte.pokemonappkotlin.viewmodels.PokemonsViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokemonListFragment : Fragment(), Interaction {

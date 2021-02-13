@@ -3,8 +3,6 @@ package  pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
-import dagger.hilt.EntryPoint
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.databinding.PokemonItemBinding
 

@@ -9,7 +9,7 @@ data class Move (
     @SerializedName("move")
     var details: MoveDetails
 
-) {
+) : Characteristic("move", details.name) {
 
     data class MoveDetails (
         @Expose
