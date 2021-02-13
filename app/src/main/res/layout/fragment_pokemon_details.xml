@@ -13,93 +13,98 @@
         android:gravity="center_horizontal"
         android:textSize="30sp"
         app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="10dp"
         tools:text="Pokemon X" />
 
-    <LinearLayout
-        android:id="@+id/layoutImages"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVert0_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHor0_4"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/textName">
+        app:layout_constraintGuide_percent="0.4" />
 
-        <ImageView
-            android:id="@+id/imgFront"
-            android:layout_width="0dp"
-            android:layout_height="150dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:contentDescription="Image Front" />
+    <ImageView
+        android:id="@+id/imgFront"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        android:contentDescription="Image Front"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHor0_4"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVert0_5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textName"
+        tools:src="@drawable/ic_launcher_background" />
 
-        <ImageView
-            android:id="@+id/imgBack"
-            android:layout_width="0dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:contentDescription="Image Back" />
+    <ImageView
+        android:id="@+id/imgBack"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        android:contentDescription="Image Back"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHor0_4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVert0_5"
+        app:layout_constraintTop_toBottomOf="@+id/textName"
+        tools:src="@drawable/ic_launcher_background" />
 
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/layoutDescriptions"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textAbilities"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/layoutImages"
-        app:layout_constraintStart_toStartOf="@+id/layoutImages"
-        app:layout_constraintTop_toBottomOf="@+id/layoutImages">
-        
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginEnd="20dp"
-            android:orientation="vertical">
-            
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:text="Abilities" />
-                
+        android:text="Abilities"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVert0_5"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineHor0_4"
+        app:layout_constraintBottom_toTopOf="@id/listAbilities" />
 
-            <ListView
-                android:id="@+id/listAbilities"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="Test" />
-            
-        </LinearLayout>
+    <TextView
+        android:id="@+id/textMoves"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Moves"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVert0_5"
+        app:layout_constraintTop_toTopOf="@+id/guidelineHor0_4"
+        app:layout_constraintBottom_toTopOf="@id/listMoves"/>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical" >
+    <ListView
+        android:id="@+id/listAbilities"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVert0_5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textAbilities"
+        tools:listitem="Test" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:text="Moves" />
-
-            <ListView
-                android:id="@+id/listMoves"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="Test" />
-
-        </LinearLayout>
-            
-    </LinearLayout>
-
-    
+    <ListView
+        android:id="@+id/listMoves"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVert0_5"
+        app:layout_constraintTop_toBottomOf="@+id/textMoves"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
+        android:paddingHorizontal="10dp"
+        tools:listitem="Test" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
