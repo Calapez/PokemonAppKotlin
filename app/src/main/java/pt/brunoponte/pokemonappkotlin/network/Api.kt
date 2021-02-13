@@ -21,7 +21,7 @@ interface Api {
     ) : Call<SimplePokemonsResponse>
 
     @GET("pokemon/{name}")
-    fun showPokemon(
+    fun getPokemonDetails(
         @Path("name") name: String
     ): Call<Pokemon>
 

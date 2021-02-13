@@ -1,22 +1,22 @@
 package  pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.RequestManager
+import dagger.hilt.EntryPoint
+import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.databinding.PokemonItemBinding
-import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse.SimplePokemon
 
 class PokemonListAdapter(
-    private val context: Context,
-    private val pokemonList: MutableList<SimplePokemon>,
+    private val pokemonList: MutableList<Pokemon>,
     private val interaction: Interaction
 ) : RecyclerView.Adapter<PokemonViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         val itemBinding = PokemonItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PokemonViewHolder(context, itemBinding, interaction)
+        return PokemonViewHolder(itemBinding, interaction)
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
@@ -25,10 +25,10 @@ class PokemonListAdapter(
 
     override fun getItemCount() = pokemonList.size
 
-    fun setPokemons(newPokemons: List<SimplePokemon>) {
+    fun setPokemons(pokemons: List<Pokemon>) {
         pokemonList.apply {
             clear()
-            addAll(newPokemons)
+            addAll(pokemons)
         }
         notifyDataSetChanged()
     }

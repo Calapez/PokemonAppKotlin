@@ -1,31 +1,23 @@
 package pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter
 
-import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import pt.brunoponte.pokemonappkotlin.R
+import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.databinding.PokemonItemBinding
-import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse
 import pt.brunoponte.pokemonappkotlin.utils.Constants.Companion.capitalizeFirstLetter
 import pt.brunoponte.pokemonappkotlin.utils.Constants.Companion.fillImageFromUrl
 
 class PokemonViewHolder(
-    private val context: Context,
     private val binding: PokemonItemBinding,
     private val interaction: Interaction
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(simplePokemon: SimplePokemonsResponse.SimplePokemon, position: Int) {
+    fun bind(pokemon: Pokemon, position: Int) {
 
-        setTitle(capitalizeFirstLetter(simplePokemon.name))
-
-        if (simplePokemon.photoUrl.isNullOrEmpty()) {
-            binding.imgPhoto.setImageDrawable(context.getDrawable(R.drawable.ic_launcher_background))
-        } else {
-            fillImageFromUrl(binding.imgPhoto, simplePokemon.photoUrl)
-        }
+        setTitle(capitalizeFirstLetter(pokemon.name))
+        fillImageFromUrl(binding.imgPhoto, pokemon.sprites.frontUrl)
 
         binding.root.setOnClickListener {
-            interaction.onItemSelected(position, simplePokemon)
+            interaction.onItemSelected(position, pokemon)
         }
     }
 

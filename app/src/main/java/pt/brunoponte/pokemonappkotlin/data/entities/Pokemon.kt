@@ -29,5 +29,5 @@ data class Pokemon (
 
     @Expose
     @SerializedName("sprites")
-    var sprites: Sprites?,
+    var sprites: Sprites,
 )

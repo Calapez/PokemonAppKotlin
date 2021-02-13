@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
+import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.databinding.FragmentPokemonDetailsBinding
@@ -16,6 +17,7 @@ import pt.brunoponte.pokemonappkotlin.utils.Constants
 import pt.brunoponte.pokemonappkotlin.utils.Constants.Companion.fillImageFromUrl
 import pt.brunoponte.pokemonappkotlin.viewmodels.PokemonsViewModel
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokemonDetailsFragment : Fragment() {
@@ -51,15 +53,17 @@ class PokemonDetailsFragment : Fragment() {
     }
 
     private fun fillPokemonUi(pokemon: Pokemon) {
+        descriptionsAdapter.clear()
+        descriptionsAdapter.addAll(getDescriptionsFromPokemon(pokemon))
+
         with(binding) {
 
             textName.text = Constants.capitalizeFirstLetter(pokemon.name)
-            descriptionsAdapter.clear()
-            descriptionsAdapter.addAll(getDescriptionsFromPokemon(pokemon))
+            listDescriptions.adapter = descriptionsAdapter
 
-            pokemon.sprites?.let { sprites ->
-                fillImageFromUrl(imgPhotoFront, sprites.frontUrl)
-                fillImageFromUrl(imgPhotoBack, sprites.backUrl)
+            pokemon.sprites.let { sprites ->
+                fillImageFromUrl(binding.imgPhotoFront, sprites.frontUrl)
+                fillImageFromUrl(binding.imgPhotoBack, sprites.backUrl)
             }
         }
     }

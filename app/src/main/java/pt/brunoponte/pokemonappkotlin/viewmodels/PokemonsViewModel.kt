@@ -3,6 +3,7 @@ package pt.brunoponte.pokemonappkotlin.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.network.Api
 import pt.brunoponte.pokemonappkotlin.network.responses.SimplePokemonsResponse.SimplePokemon
@@ -13,9 +14,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
+@HiltViewModel
 class PokemonsViewModel
 @Inject constructor(
-    private val repository: PokemonRepository
+    val repository: PokemonRepository
 ): ViewModel() {
 
     private val selectedPokemon = MutableLiveData<Pokemon>()
@@ -24,50 +26,26 @@ class PokemonsViewModel
         return repository.getIsFetching()
     }
 
-    fun getSimplePokemons(): LiveData<List<SimplePokemon>> {
-        return repository.getSimplePokemons()
+    fun getPokemons(): LiveData<List<Pokemon>> {
+        return repository.getPokemons()
     }
 
     fun getSelectedPokemon(): LiveData<Pokemon> {
         return selectedPokemon
     }
 
-    fun selectPokemon(pokemon: SimplePokemon) {
-        fetchPokemonDetails(pokemon.name)
+    fun selectPokemon(pokemon: Pokemon) {
+        selectedPokemon.value = pokemon
     }
 
     fun fetchMorePokemons() {
-        if (repository.getSimplePokemons().value == null) {
+        if (repository.getPokemons().value == null) {
             return
         }
 
         // Offset is simply the size of the pokemons
-        val offset = repository.getSimplePokemons().value!!.size
+        val offset = repository.getPokemons().value!!.size
         repository.fetchPokemons(offset, Constants.pageSize)
     }
-
-    // FIXME: This is just temporarily in ModelView
-    private fun fetchPokemonDetails(name: String) {
-        val apiService = Api()
-
-        val showPokemonsCall: Call<Pokemon> = apiService.showPokemon(name)
-        showPokemonsCall.enqueue(object : Callback<Pokemon> {
-            override fun onResponse(
-                call: Call<Pokemon>,
-                response: Response<Pokemon>
-            ) {
-                selectedPokemon.postValue(response.body())
-            }
-
-            override fun onFailure(
-                call: Call<Pokemon>,
-                t: Throwable
-            ) {
-                t.printStackTrace()
-                selectedPokemon.postValue(null)
-            }
-        })
-    }
-
 
 }
