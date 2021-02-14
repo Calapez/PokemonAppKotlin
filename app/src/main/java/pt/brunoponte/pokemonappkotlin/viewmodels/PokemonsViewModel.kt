@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
-import pt.brunoponte.pokemonappkotlin.repositories.PokemonRepository
+import pt.brunoponte.pokemonappkotlin.data.repositories.PokemonRepository
 import pt.brunoponte.pokemonappkotlin.utils.Constants
 import javax.inject.Inject
 

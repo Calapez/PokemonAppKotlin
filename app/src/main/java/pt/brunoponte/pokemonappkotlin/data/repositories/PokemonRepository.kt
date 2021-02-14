@@ -1,4 +1,4 @@
-package pt.brunoponte.pokemonappkotlin.repositories
+package pt.brunoponte.pokemonappkotlin.data.repositories
 
 import androidx.lifecycle.MutableLiveData
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
@@ -15,32 +15,37 @@ class PokemonRepository
     private val api: Api
 ) {
 
-    private val mPokemons: MutableLiveData<List<Pokemon>> = MutableLiveData(mutableListOf())
+    private val _pokemons: MutableLiveData<List<Pokemon>> = MutableLiveData(mutableListOf())
 
-    private val mIsFetching: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isFetching: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getPokemons()
-            = mPokemons
+            = _pokemons
 
     fun getIsFetching()
-            = mIsFetching
+            = _isFetching
 
     fun fetchPokemons(offset: Int, pageSize: Int) {
         fetchSimplePokemonsFromApi(offset, pageSize)
     }
 
-    private fun savePokemon(pokemon: Pokemon) {
-        mPokemons.value?.let { oldPokemons ->
-            val newPokemons = oldPokemons.toMutableList()
-                    .also { it.add(pokemon) }
+    private fun savePokemons(pokemonsToSave: List<Pokemon?>) {
+        _pokemons.value?.let { oldPokemons ->
 
-            mPokemons.value = newPokemons
+            val newPokemons = oldPokemons.toMutableList()
+            pokemonsToSave.forEach { pokemonToSave ->
+                if (pokemonToSave != null) {
+                    newPokemons.add(pokemonToSave)
+                }
+            }
+
+            _pokemons.value = newPokemons
         }
     }
 
     // Fetch pokemons from a given offset and with a given pageSize
     private fun fetchSimplePokemonsFromApi(offset: Int, pageSize: Int) {
-        mIsFetching.postValue(true)
+        _isFetching.postValue(true)
 
         // Fetch simple pokemons
         api.listPokemons(offset, pageSize)
@@ -52,40 +57,44 @@ class PokemonRepository
 
                     if (response.isSuccessful) {
                         response.body()?.simplePokemons?.let { simplePokemons ->
-                            fetchFullPokemonsFromApi(simplePokemons)
+                            val simplePokemonsMap = simplePokemons.map {
+                                it.name to it
+                            }.toMap()
+
+                            fetchFullPokemonsFromApi(simplePokemonsMap)
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<SimplePokemonsResponse>, t: Throwable) {
-                    mIsFetching.postValue(false)
+                    _isFetching.postValue(false)
                 }
             })
     }
 
     // Fetch full pokemons from a list of simple pokemons
-    private fun fetchFullPokemonsFromApi(simplePokemons: List<SimplePokemon>) {
-        mIsFetching.value = true
+    private fun fetchFullPokemonsFromApi(simplePokemons: Map<String, SimplePokemon>) {
+        _isFetching.postValue(true)
 
-        var fetchedPokemons = 0
+        // Keep pokemons sorted by ID
+        val fullPokemonsMap = sortedMapOf<Long, Pokemon>()
 
-        simplePokemons.forEach { simplePokemon ->
-
-            api.getFullPokemon(simplePokemon.name).enqueue(object: Callback<Pokemon> {
+        simplePokemons.keys.forEach { pokemonName ->
+            api.getFullPokemon(pokemonName).enqueue(object: Callback<Pokemon> {
                 override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
-                    response.body()?.let { pokemon ->
-                        savePokemon(pokemon)
-                        fetchedPokemons++
+                    response.body()?.let { fullPokemon ->
+                        fullPokemonsMap[fullPokemon.id] = fullPokemon
                     }
 
-                    if (fetchedPokemons == simplePokemons.size) {
-                        mIsFetching.postValue(false)
+                    if (fullPokemonsMap.size == simplePokemons.size) {
+                        savePokemons(fullPokemonsMap.values.toList())
+                        _isFetching.postValue(false)
                         return
                     }
                 }
 
                 override fun onFailure(call: Call<Pokemon>, t: Throwable) {
-                    mIsFetching.postValue(false)
+                    _isFetching.postValue(false)
                 }
 
             })
