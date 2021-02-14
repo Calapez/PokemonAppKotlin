@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Pokemon App Kotlin</string>
+    <string name="abilities">Abilities</string>
+    <string name="moves">Moves</string>
 </resources>

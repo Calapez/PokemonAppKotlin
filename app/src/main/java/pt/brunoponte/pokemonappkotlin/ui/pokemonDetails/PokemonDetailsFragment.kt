@@ -1,6 +1,7 @@
 package pt.brunoponte.pokemonappkotlin.ui.pokemonDetails
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,13 +65,11 @@ class PokemonDetailsFragment : Fragment() {
     }
 
     private fun updateUi(pokemon: Pokemon) {
-        with(binding) {
-            textName.text = capitalizeFirstLetter(pokemon.name)
+        binding.textName.text = capitalizeFirstLetter(pokemon.name)
 
-            pokemon.sprites.let { sprites ->
-                fillImageFromUrl(binding.imgBack, sprites.backUrl)
-                fillImageFromUrl(binding.imgFront, sprites.frontUrl)
-            }
+        pokemon.sprites.let { sprites ->
+            fillImageFromUrl(binding.imgBack, sprites.backUrl)
+            fillImageFromUrl(binding.imgFront, sprites.frontUrl)
         }
 
         updateAdapters(pokemon)
@@ -89,4 +88,6 @@ class PokemonDetailsFragment : Fragment() {
                 }
         )
     }
+
+
 }

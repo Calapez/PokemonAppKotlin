@@ -1,6 +1,7 @@
 package pt.brunoponte.pokemonappkotlin.ui.pokemonList
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +48,11 @@ class PokemonListFragment : Fragment(), Interaction {
         initRecyclerView()
         setObservers()
 
-        viewModel.fetchMorePokemons()
+        Log.d("Details", "SavedInstance is null? = ${savedInstanceState == null}")
+
+        if (savedInstanceState == null) {
+            viewModel.fetchMorePokemons()
+        }
     }
 
     override fun onItemSelected(position: Int, item: Pokemon) {
@@ -67,10 +72,6 @@ class PokemonListFragment : Fragment(), Interaction {
             this.adapter = listAdapter
 
             this.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                }
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)

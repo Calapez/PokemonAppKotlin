@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pt.brunoponte.pokemonappkotlin.databinding.CharacteristicItemBinding
-import pt.brunoponte.pokemonappkotlin.ui.pokemonDetails.adapter.CharacteristicViewHolder
 
 class CharacteristicsAdapter(
     private val stringList: MutableList<String> = mutableListOf()

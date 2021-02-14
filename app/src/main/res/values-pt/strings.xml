@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pokemon App Kotlin</string>
+    <string name="abilities">Habilidades</string>
+    <string name="moves">Movimentos</string>
+</resources>
