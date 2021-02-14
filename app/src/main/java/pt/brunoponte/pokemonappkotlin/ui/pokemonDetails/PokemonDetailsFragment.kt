@@ -12,8 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.databinding.FragmentPokemonDetailsBinding
 import pt.brunoponte.pokemonappkotlin.ui.pokemonDetails.adapter.CharacteristicsAdapter
-import pt.brunoponte.pokemonappkotlin.utils.Constants.Companion.capitalizeFirstLetter
-import pt.brunoponte.pokemonappkotlin.utils.Constants.Companion.fillImageFromUrl
+import pt.brunoponte.pokemonappkotlin.utils.Helpers.Companion.capitalizeFirstLetter
+import pt.brunoponte.pokemonappkotlin.utils.Helpers.Companion.fillImageFromUrl
 import pt.brunoponte.pokemonappkotlin.viewmodels.PokemonsViewModel
 
 @AndroidEntryPoint

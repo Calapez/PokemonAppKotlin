@@ -3,8 +3,8 @@ package pt.brunoponte.pokemonappkotlin.ui.pokemonList.adapter
 import androidx.recyclerview.widget.RecyclerView
 import pt.brunoponte.pokemonappkotlin.data.entities.Pokemon
 import pt.brunoponte.pokemonappkotlin.databinding.PokemonItemBinding
-import pt.brunoponte.pokemonappkotlin.utils.Constants.Companion.capitalizeFirstLetter
-import pt.brunoponte.pokemonappkotlin.utils.Constants.Companion.fillImageFromUrl
+import pt.brunoponte.pokemonappkotlin.utils.Helpers.Companion.capitalizeFirstLetter
+import pt.brunoponte.pokemonappkotlin.utils.Helpers.Companion.fillImageFromUrl
 
 class PokemonViewHolder(
     private val binding: PokemonItemBinding,
