@@ -20,7 +20,7 @@
 <p>
 Esta é uma <b>single-activity application que utiliza o componente Navigation</b> para gerir os dois Fragmentos existentes - no primeiro, PokemonListFragment, é possível ver a lista de Pokémons com respetivo nome e foto; no segundo, PokemonDetailsFragment, é possível ver os detalhes de um Pokémon, o que inclui nome, foto frontal e traseira, habilidades, e movimentos.
 
-É utilizado o design pattern <b>MVVM</b>, sendo que ambos os fragmentos têm um ViewModel partilhado.
+Foi utilizado o design pattern <b>MVVM</b>, sendo que ambos os fragmentos têm um ViewModel partilhado.
 
 Foi utilizada a biblioteca <b>Retrofit2</b> para efetuar os pedidos à API e, juntamente com o GSON, permitiu desserializar as suas respostas automaticamente.
 
