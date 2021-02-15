@@ -4,6 +4,18 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Format:
+ *  {
+ *      "id": 1,
+ *      "name": "pikachu",
+ *      "weight": 12,
+ *      "moves": [Move, ...],
+ *      "abilities": [Ability, ...],
+ *      "sprites": Sprites
+ *  }
+ */
+
 data class Pokemon (
 
     @Expose

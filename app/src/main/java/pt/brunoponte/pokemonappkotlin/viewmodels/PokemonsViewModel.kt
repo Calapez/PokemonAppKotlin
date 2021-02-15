@@ -38,7 +38,7 @@ class PokemonsViewModel
             return
         }
 
-        // Offset is simply the size of the pokemons
+        // Offset is the size of the current Pokemons
         val offset = repository.getPokemons().value!!.size
         repository.fetchPokemons(offset, Constants.pageSize)
     }

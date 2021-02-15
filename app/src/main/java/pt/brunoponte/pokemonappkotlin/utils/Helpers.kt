@@ -14,6 +14,10 @@ class Helpers {
                 .into(imgView)
         }
 
+        /**
+         * Capitalizes first letter.
+         * Example: "pikachu" returns "Pikachu"
+         */
         fun capitalizeFirstLetter(str: String) =
             if (str.isEmpty()) ""
             else str.substring(0, 1).toUpperCase(Locale.ROOT) + str.substring(1)

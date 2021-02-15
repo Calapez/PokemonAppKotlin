@@ -3,6 +3,13 @@ package pt.brunoponte.pokemonappkotlin.data.entities
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Format:
+ *  {
+ *      "ability": AbilityDetails
+ *  }
+ */
+
 data class Ability (
 
     @Expose
@@ -10,6 +17,13 @@ data class Ability (
     var details: AbilityDetails
 
 ) {
+
+    /**
+     * Format:
+     * {
+     *      "name": "overgrow"
+     * }
+     */
 
     data class AbilityDetails (
         @SerializedName("name")

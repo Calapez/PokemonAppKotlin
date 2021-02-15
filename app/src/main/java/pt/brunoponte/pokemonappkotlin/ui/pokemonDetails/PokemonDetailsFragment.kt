@@ -41,6 +41,7 @@ class PokemonDetailsFragment : Fragment() {
     }
 
     private fun initRecyclerViews() {
+        // Init abilities recycler view
         with(binding.recylerAbilities) {
             val layoutManager = LinearLayoutManager(context)
             layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -49,6 +50,7 @@ class PokemonDetailsFragment : Fragment() {
             this.adapter = abilitiesAdapter
         }
 
+        // Init moves recycler view
         with(binding.recyclerMoves) {
             val layoutManager = LinearLayoutManager(context)
             layoutManager.orientation = LinearLayoutManager.VERTICAL

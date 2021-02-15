@@ -48,8 +48,6 @@ class PokemonListFragment : Fragment(), Interaction {
         initRecyclerView()
         setObservers()
 
-        Log.d("Details", "SavedInstance is null? = ${savedInstanceState == null}")
-
         if (savedInstanceState == null) {
             viewModel.fetchMorePokemons()
         }
@@ -63,7 +61,6 @@ class PokemonListFragment : Fragment(), Interaction {
     }
 
     private fun initRecyclerView() {
-        // Set recycler view
         with(binding.recyclerPokemons) {
             val layoutManager = LinearLayoutManager(context)
             layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -72,7 +69,6 @@ class PokemonListFragment : Fragment(), Interaction {
             this.adapter = listAdapter
 
             this.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
@@ -100,11 +96,13 @@ class PokemonListFragment : Fragment(), Interaction {
 
     private fun setObservers() {
         viewModel.getPokemons().observe(viewLifecycleOwner) { pokemons ->
+            // New pokemons, update list adapter
             listAdapter.setPokemons(pokemons)
         }
 
         viewModel.getIsFetching().observe(viewLifecycleOwner) { isLoading ->
-                binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+            // Fetching state changed, change progress bar
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
         }
     }
 

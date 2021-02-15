@@ -16,7 +16,6 @@ class PokemonRepository
 ) {
 
     private val _pokemons: MutableLiveData<List<Pokemon>> = MutableLiveData(mutableListOf())
-
     private val _isFetching: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getPokemons()
@@ -29,21 +28,16 @@ class PokemonRepository
         fetchSimplePokemonsFromApi(offset, pageSize)
     }
 
-    private fun savePokemons(pokemonsToSave: List<Pokemon?>) {
+    private fun savePokemons(pokemonsToSave: List<Pokemon>) {
         _pokemons.value?.let { oldPokemons ->
-
-            val newPokemons = oldPokemons.toMutableList()
-            pokemonsToSave.forEach { pokemonToSave ->
-                if (pokemonToSave != null) {
-                    newPokemons.add(pokemonToSave)
-                }
+            val newPokemons = oldPokemons.toMutableList().also {
+                it.addAll(pokemonsToSave)
             }
-
             _pokemons.value = newPokemons
         }
     }
 
-    // Fetch pokemons from a given offset and with a given pageSize
+    // Search/Fetch SimplePokemons from a given offset and with a given pageSize
     private fun fetchSimplePokemonsFromApi(offset: Int, pageSize: Int) {
         _isFetching.postValue(true)
 
@@ -72,7 +66,7 @@ class PokemonRepository
             })
     }
 
-    // Fetch full pokemons from a list of simple pokemons
+    // Fetch full Pokemons based on a list of SimplePokemons
     private fun fetchFullPokemonsFromApi(simplePokemons: Map<String, SimplePokemon>) {
         _isFetching.postValue(true)
 

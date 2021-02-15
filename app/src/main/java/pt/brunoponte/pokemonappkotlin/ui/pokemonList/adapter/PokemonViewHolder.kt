@@ -12,7 +12,6 @@ class PokemonViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(pokemon: Pokemon, position: Int) {
-
         setTitle(capitalizeFirstLetter(pokemon.name))
         fillImageFromUrl(binding.imgPhoto, pokemon.sprites.frontUrl)
 
