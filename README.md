@@ -22,7 +22,7 @@ Esta é uma <b>single-activity application que utiliza o componente Navigation</
 
 Foi utilizado o design pattern <b>MVVM</b>, sendo que ambos os fragmentos têm um ViewModel partilhado.
 
-Foi utilizada a biblioteca <b>Retrofit2</b> para efetuar os pedidos à API e, juntamente com o GSON, permitiu desserializar as suas respostas automaticamente.
+Foi utilizada a biblioteca <b>Retrofit</b> para efetuar os pedidos à API e, juntamente com o GSON, permitiu desserializar as suas respostas automaticamente.
 
 Foi utilizado <b>Hilt (expansão de Dagger que reduz o boilerplate) para injeção de dependências</b>.
 
